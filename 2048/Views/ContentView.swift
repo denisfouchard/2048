@@ -7,11 +7,9 @@
 
 import SwiftUI
 
-
 struct ContentView: View {
     @StateObject var model : GridModel
     @StateObject var scoreManager : ScoreManager = ScoreManager()
-    @State var gameOver = false
     
     @ViewBuilder
     func gameOverOverlay() -> some View {
@@ -25,11 +23,31 @@ struct ContentView: View {
                     .padding()
                 Button("Restart") {
                     model.reset()
-                    gameOver = false
                 }.buttonStyle(TileButtonStyle())
                 .padding()
-                .background(Color.white)
-                .cornerRadius(8)
+            }
+        }
+    }
+    
+    @ViewBuilder
+    func winOverlay() -> some View {
+        ZStack {
+            Color.black.opacity(0.5)
+                .ignoresSafeArea()
+            VStack {
+                Text("Congratulations !")
+                    .font(.largeTitle)
+                    .foregroundColor(.white)
+                    .padding()
+                Button("Restart") {
+                    model.reset()
+                }.buttonStyle(TileButtonStyle())
+                .padding()
+                Button("Continue playing") {
+                    model.gameState = GameState.playing
+                    
+                }.buttonStyle(TileButtonStyle())
+                .padding()
             }
         }
     }
@@ -59,7 +77,6 @@ struct ContentView: View {
         
                 Button(action: {
                     model.reset()
-                    gameOver = false
                 }) {
                     Text("New Game")
                         .font(.title2)
@@ -74,7 +91,9 @@ struct ContentView: View {
             Spacer(minLength: 10)
             
             KeyEventHandlingView(onKeyDown: handleKey)
-            TileGridView(model: model).overlay(gameOverOverlay().opacity(gameOver ? 1 : 0))
+            TileGridView(model: model)
+                .overlay(gameOverOverlay().opacity(model.gameState == GameState.loose ? 1 : 0))
+                .overlay(winOverlay().opacity(model.gameState == GameState.win ? 1 : 0))
                 .frame(minWidth: 410, minHeight: 410)  // minimum size to avoid shrinking too much
                 .aspectRatio(1, contentMode: .fit)
             
@@ -87,15 +106,17 @@ struct ContentView: View {
     }
     
     func handleKey(_ event: NSEvent) {
+        if (model.gameState == GameState.playing){
             switch event.keyCode {
-            case 123: gameOver = model.moveLeft()
-            case 124: gameOver = model.moveRight()
-            case 125: gameOver = model.moveDown()
-            case 126: gameOver = model.moveUp()
-            default: gameOver = false
+            case 123:  model.moveLeft()
+            case 124:  model.moveRight()
+            case 125:  model.moveDown()
+            case 126:  model.moveUp()
+            default:  GameState.playing
             }
-        scoreManager.updateIfBetter(model.score)
+            scoreManager.updateIfBetter(model.score)
         }
+    }
 }
 
 #Preview {
