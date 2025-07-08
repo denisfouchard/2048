@@ -11,7 +11,7 @@ import SwiftUI
 struct _048App: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
-        }
+            ContentView(model: GridModel(test: true))
+        }.windowResizability(.contentSize)
     }
 }
