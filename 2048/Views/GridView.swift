@@ -8,7 +8,10 @@ struct TileGridView: View {
     private let columns = Array(repeating: GridItem(.flexible()), count: 4)
     private let spacing: CGFloat = 16
     private let padding: CGFloat = 16
+    
+    @Namespace private var tileNamespace
 
+    // MARK: - Grid layout
     var body: some View {
         GeometryReader { geometry in
             let gridSize = geometry.size.width - 2 * padding
@@ -19,7 +22,9 @@ struct TileGridView: View {
                     ForEach(0..<model.dimensions.rows, id: \.self) { row in
                         ForEach(0..<model.dimensions.cols, id:\.self){ col in
                             let value = model.gridMatrix[row][col]
-                            tileView(value: value, tileSize: tileSize).id("\(row)-\(col)")
+                            tileView(value: value, tileSize: tileSize)
+                                .id("\(row)-\(col)")
+                                
                         }
                     }
                 }
@@ -47,6 +52,8 @@ struct TileGridView: View {
                     .foregroundColor(tileTextColor(for: value))
                     .accessibilityLabel("tileNumber")
             )
+            .transition(.scale.combined(with: .opacity))
+            .animation(.easeInOut, value: value)
     }
 
     // MARK: - Helpers
