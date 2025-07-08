@@ -88,7 +88,23 @@ class GridModel : ObservableObject {
         return tilesInRow
     }
     
-    func moveLeft() -> GameState {
+    func isGameOver() -> GameState{
+        // Check if two consecutive times can be merged somehow
+        
+        // Check rows
+        for i in 0..<4 {
+            let row = gridMatrix[i]
+            let col = getColumn(matrix: gridMatrix, index: i)
+            for j in 0..<3 {
+                if ((row[j] == row[j+1]) || (col[j] == col[j+1])){
+                    return GameState.playing
+                }
+            }
+        }
+        return GameState.loose
+    }
+    
+    func moveLeft(){
         var numTilesPerRow = [0,0,0,0]
         for i in 0..<4 {
             let row = self.gridMatrix[i]
@@ -114,18 +130,14 @@ class GridModel : ObservableObject {
         }
         
         if availableRows.isEmpty {
-            gameState = GameState.loose
-            return gameState
+            gameState = isGameOver()
+            return
         }
         let rowToAdd = availableRows.randomElement()
         self.gridMatrix[rowToAdd!][3] = (Float.random(in: 0...1) > 0.8 ? 4: 2) // 20% chance of getting a 4
-        
-        
-        return gameState
-        
     }
     
-    func moveRight() -> GameState {
+    func moveRight(){
         var numTilesPerRow = [0,0,0,0]
         for i in 0..<4 {
             let row = self.gridMatrix[i]
@@ -151,18 +163,14 @@ class GridModel : ObservableObject {
         }
         
         if availableRows.isEmpty {
-            gameState = GameState.loose
-            return gameState
+            gameState = isGameOver()
+            return
         }
         let rowToAdd = availableRows.randomElement()
         self.gridMatrix[rowToAdd!][0] = (Float.random(in: 0...1) > 0.8 ? 4: 2) // 20% chance of getting a 4
-        
-        
-        return gameState
-        
     }
     
-    func moveDown() -> GameState {
+    func moveDown(){
         var numTilesPerCol = [0,0,0,0]
         for i in 0..<4 {
             let col = getColumn(matrix: self.gridMatrix, index: i)
@@ -188,19 +196,14 @@ class GridModel : ObservableObject {
         }
         
         if availableCols.isEmpty {
-            gameState = GameState.loose
-            return gameState
+            gameState = isGameOver()
+            return
         }
         let colToAdd = availableCols.randomElement()
         self.gridMatrix[0][colToAdd!] = (Float.random(in: 0...1) > 0.8 ? 4: 2) // 20% chance of getting a 4
-        
-        
-        return gameState
-        
     }
     
-    func moveUp() -> GameState {
-        var gameOver = false
+    func moveUp() {
         var numTilesPerCol = [0,0,0,0]
         for i in 0..<4 {
             let col = getColumn(matrix: self.gridMatrix, index: i)
@@ -226,14 +229,12 @@ class GridModel : ObservableObject {
         }
         
         if availableCols.isEmpty {
-            gameState = GameState.loose
-            return gameState
+            gameState = isGameOver()
+            return
         }
         let colToAdd = availableCols.randomElement()
         self.gridMatrix[3][colToAdd!] = (Float.random(in: 0...1) > 0.8 ? 4: 2) // 20% chance of getting a 4
         
-        
-        return gameState
         
     }
     

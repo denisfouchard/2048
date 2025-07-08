@@ -21,10 +21,14 @@ struct ContentView: View {
                     .font(.largeTitle)
                     .foregroundColor(.white)
                     .padding()
-                Button("Restart") {
-                    model.reset()
+                Button(action:
+                        {model.reset()}
+                ) {
+                    Text("New Game")
+                        .font(.title2)
+                        .foregroundColor(.white)
+                       .padding(8)
                 }.buttonStyle(TileButtonStyle())
-                .padding()
             }
         }
     }
@@ -38,16 +42,26 @@ struct ContentView: View {
                 Text("Congratulations !")
                     .font(.largeTitle)
                     .foregroundColor(.white)
-                    .padding()
-                Button("Restart") {
-                    model.reset()
+                  
+                Button(action:
+                        {model.reset()}
+                ) {
+                    Text("New Game")
+                        .font(.title2)
+                        .foregroundColor(.white)
+                       .padding(8)
                 }.buttonStyle(TileButtonStyle())
-                .padding()
-                Button("Continue playing") {
-                    model.gameState = GameState.playing
+           
+                Button(action :
+                        {model.gameState = GameState.playing
+                }
+                ) {
+                    Text("Continue playing")
+                        .font(.title2)
+                        .foregroundColor(.white)
+                        .padding(8)
                     
                 }.buttonStyle(TileButtonStyle())
-                .padding()
             }
         }
     }
@@ -112,7 +126,7 @@ struct ContentView: View {
             case 124:  model.moveRight()
             case 125:  model.moveDown()
             case 126:  model.moveUp()
-            default:  GameState.playing
+            default:  ()
             }
             scoreManager.updateIfBetter(model.score)
         }
