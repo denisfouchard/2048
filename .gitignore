@@ -1,0 +1,59 @@
+//
+//  .gitignore
+//  2048
+//
+//  Created by Denis Fouchard on 08/07/2025.
+//
+# Xcode
+*.xcuserstate
+*.xccheckout
+*.xcscmblueprint
+*.xcodeproj/*
+!*.xcodeproj/project.pbxproj
+!*.xcodeproj/xcshareddata/
+*.xcworkspace/*
+!*.xcworkspace/contents.xcworkspacedata
+!*.xcworkspace/xcshareddata/
+
+# Build artifacts
+build/
+DerivedData/
+*.ipa
+*.app
+*.dSYM
+
+# SwiftPM
+.build/
+Packages/
+.swiftpm/xcode/package.xcworkspace/
+
+# CocoaPods
+Pods/
+Podfile.lock
+
+# Carthage
+Carthage/
+Carthage/Build/
+
+# Fastlane
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots/**/*.png
+fastlane/test_output
+
+# Archives
+*.xcarchive
+
+# User files
+*.DS_Store
+*.swp
+*.swo
+
+# Logs
+*.log
+
+# Xcode's automatic previews cache
+__Previews__/
+
+# SwiftUI canvas previews
+*.canvas
